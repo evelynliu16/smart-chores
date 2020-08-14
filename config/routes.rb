@@ -7,12 +7,16 @@ Rails.application.routes.draw do
   post '/signin', to: "signin_register#signin"
   post '/register', to: "signin_register#register"
  
-  get '/chores_changes', to: "home#index"
-  get '/get_members', to: "home#get_members"
   get '/home', to: "home#index"
+  get '/chores_changes', to: "home#index"
+  get 'members_changes', to: "home#index"
+  get '/get_members', to: "home#get_members"
+  get '/all_chores', to: "home#all_chores"
+  post '/switch_chores', to: "home#switch_chores"
   post '/get_chores', to: "home#get_chores"
   post '/member_chores', to: "home#member_chores"
-  get '/all_chores', to: "home#all_chores"
   post '/chores_arrangement_changes', to: "home#chores_arrangement_changes"
+  post '/add_new_member', to: "home#add_new_member"
+  post '/delete_member', to: "home#delete_member"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

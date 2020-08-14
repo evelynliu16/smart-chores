@@ -99,8 +99,8 @@ class ChoresChange extends Component {
         }
         
         return (
-            <div>
-                <h1>Change chores arrangement</h1>
+            <div className="background">
+                <h3 className="page-title">Change chores arrangement</h3><br/>
                 {should_return  ? (
                     this.state.members.map(member => (
                         <div key={member.id}>
@@ -108,9 +108,9 @@ class ChoresChange extends Component {
                             <form id={member.id}>
                                 {this.state.chores.map(chore => (
                                     <React.Fragment key={chore.id}>
-                                        <input type="checkbox" id={member.id} value={chore.id} 
+                                        <input type="checkbox" className="regular-checkbox" id={member.id} value={chore.id} 
                                         checked={this.state[member.id][chore.id]} onChange={this.handleChange} />
-                                        <label htmlFor={chore.id}>{chore.title}</label>
+                                        <label className="checkbox-label" htmlFor={chore.id}>{chore.title}</label>
                                     </React.Fragment>
                                 ))}
                             </form>

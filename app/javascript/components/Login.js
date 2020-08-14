@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Register from "./Register";
-import styles from './App.css';
 
 class Login extends Component {
     constructor(props) {
@@ -49,6 +48,12 @@ class Login extends Component {
         this.props.handleLogin(data);
         this.props.history.push("/home")
     }
+
+    componentDidUpdate(prevStates, prevProps) {
+        if (this.props.loggedInStatus === "LOGGED_IN") {
+            this.props.history.push('/home'); 
+        }
+    } 
 
     render() {
         return (

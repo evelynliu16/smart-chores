@@ -3,9 +3,9 @@ class HomeController < ApplicationController
   end
 
   def get_members
-    members = User.find_by(id: session[:user_id]).members
+    @@members = User.find_by(id: session[:user_id]).members
     render json: {
-      members: members,
+      members: @@members,
     }
   end
 
@@ -17,14 +17,13 @@ class HomeController < ApplicationController
   end
 
   def all_chores
-    chores = User.find_by(id: session[:user_id]).chores
+    @chores = User.find_by(id: session[:user_id]).chores
     render json: {
-      chores: chores
+      chores: @chores
     }
   end
 
   def chores_arrangement_changes
-    puts params[:data]
     params[:data].each {|key, value|
       member = Member.find_by(id: key)
       new_chores = []
@@ -36,5 +35,53 @@ class HomeController < ApplicationController
       member.chore_ids = new_chores
       end
     }
+  end
+
+  def switch_chores
+    if params[:id].eql?("0")
+      tracker = 0
+      first_chores = @@members[0].chore_ids
+      @@members.each do |member|
+        if tracker < @@members.length - 1
+          new_chores = @@members[tracker + 1].chore_ids
+          member.chore_ids = new_chores
+          tracker += 1
+        else
+          member.chore_ids = first_chores
+        end
+      end
+    else 
+      tracker = @@members.length - 1
+      last_chores = @@members[tracker].chore_ids
+      while tracker >= 0
+        member = @@members[tracker]
+        if tracker > 0
+          puts member.name
+          new_chores = @@members[tracker - 1].chore_ids
+          member.chore_ids = new_chores
+          tracker -= 1
+        else
+          puts member.name
+          member.chore_ids = last_chores
+          tracker -= 1
+        end
+      end
+    end
+    render json: {
+      switched: true
+    }
+  end
+
+  def add_new_member
+    name = params[:member]
+    new_member = Member.create(name: name, user_id: session[:user_id])
+    render json: {
+      new_member: new_member
+    }
+  end
+
+  def delete_member
+    id = params[:member_id]
+    Member.find_by(id: id).delete
   end
 end
