@@ -12,9 +12,11 @@ class Home extends Component {
         this.handleLogout = this.handleLogout.bind(this);
         this.choresArrangementChanges = this.choresArrangementChanges.bind(this);
         this.memberChange = this.memberChange.bind(this);
+        this.choresChange = this.choresChange.bind(this);
         this.reset = this.reset.bind(this);
         this.getMemberAndChores = this.getMembersAndChores.bind(this);
         this.switch = this.switch.bind(this);
+        this.handleSetUp = this.handleSetUp.bind(this);
     }
 
     /** Log out the user. */
@@ -31,6 +33,10 @@ class Home extends Component {
 
     /** Change the chores arrangement. */
     choresArrangementChanges() {
+        this.props.history.push("/arrangement");
+    }
+
+    choresChange() {
         this.props.history.push("/chores_changes");
     }
 
@@ -59,7 +65,17 @@ class Home extends Component {
 
     /** Reset all members and chores. */
     reset() {
-        this.props.history.push("/reset");
+        axios.post("http://localhost:3000/reset",
+                {withCredentials: true})
+            .then(response => {
+                this.setState({
+                    members: []
+                })
+            })
+    }
+
+    handleSetUp() {
+        this.props.history.push('/set_up');
     }
     
     componentDidMount() {
@@ -97,7 +113,7 @@ class Home extends Component {
     render() {
         var members_array = slice(this.state.members, 2);
         return (
-            <div className="background"> 
+            <React.Fragment> 
                 <div className="container">
                     {members_array.map(members => (
                         <div className="row" key={members[0].id}>
@@ -108,13 +124,22 @@ class Home extends Component {
                         </div>
                         ))}
                 </div>
-                <button type="button" onClick={this.choresArrangementChanges}>Change the chores arrangement</button><br/>
-                <button type="button" onClick={this.memberChange}>Change the members</button><br/>
-                <button type="button" onClick={this.reset}>Reset</button><br/>
-                <button type="button" value="Chores switched clockwise" id="1" onClick={this.switch}>Switch clockwise</button>
-                <button type="button" value="Chores switched counterclockwise" id="0" onClick={this.switch}>Switch counterclockwise</button><br/>
-                <button type="button" onClick={this.handleLogout}>Log out</button>
-            </div>
+                {this.state.members.length != 0 ? 
+                (<React.Fragment>
+                    <button type="button" onClick={this.choresArrangementChanges}>Change the chores arrangement</button><br/>
+                    <button type="button" onClick={this.memberChange}>Change the members</button><br/>
+                    <button type="button" onClick={this.choresChange}>Change the chores</button><br/>
+                    <button type="button" onClick={this.reset}>Reset</button><br />
+                    <button type="button" value="Chores switched clockwise" id="1" onClick={this.switch}>Switch clockwise</button>
+                    <button type="button" value="Chores switched counterclockwise" id="0" onClick={this.switch}>Switch counterclockwise</button><br/>
+                    <button type="button" onClick={this.handleLogout}>Log out</button>
+                </React.Fragment>) 
+                : (<React.Fragment>
+                    <h1>You do not have any members added yet</h1>
+                    <button type="button" onClick={this.handleSetUp}>Add members and chores</button>
+                   </React.Fragment>)
+                }
+            </React.Fragment>
         );
     }
 }
@@ -129,14 +154,14 @@ class Card extends Component {
         return (
             <div className="col col-sm-6 cards">
                 <h1 className="name">{this.props.member.name}</h1>
-                {this.props.chores ?
+                {this.props.chores && this.props.chores.length != 0 ?
                 (this.props.chores.map(chore => (
                     <div key={this.props.member.id + chore.id}>
                     <h2 className="title">{chore.title}</h2>
                     <h3 className="descript">{chore.description}</h3>
                     </div>)
                 )) :
-                (<h2>No chores</h2>)
+                (<h5>No chores</h5>)
                 }
             </div >
         );

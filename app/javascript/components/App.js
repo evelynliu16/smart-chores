@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Login from './Login';
 import Home from './Home';
-import ChoresChange from './ChoresChange'
+import Arrangement from './Arrangement'
 import MembersChange from './MembersChange'
 import axios from 'axios';
+import SetUp from './SetUp';
+import ChoresChange from './ChoresChange';
 export default class App extends Component {
     constructor() {
         super();
@@ -12,14 +14,17 @@ export default class App extends Component {
         this.state = {
             loggedInStatus: "NOT_LOGGED_IN",
             user: {},
-            members: []
+            members: [],
+            chores: []
         }
 
         this.handleLogin = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
         this.checkLoginStatus = this.checkLoginStatus.bind(this);
         this.getMembers = this.getMembers.bind(this);
+        this.allChores = this.allChores.bind(this);
         this.handleMemberChange = this.handleMemberChange.bind(this);
+        this.handleChoresChange = this.handleChoresChange.bind(this);
     }
 
     handleLogin(data) {
@@ -50,6 +55,20 @@ export default class App extends Component {
         });
     }
 
+    allChores() {
+        axios.get("http://localhost:3000/all_chores",
+            { withCredentials: true }
+        )
+            .then(response => {
+                this.setState({
+                    chores: response.data.chores
+                })
+            })
+            .catch(error => {
+                console.log("Get chores error", error);
+            });
+    }
+
     handleMemberChange(action_member, action) {
         if (action === 'add') {
             this.setState({
@@ -60,6 +79,19 @@ export default class App extends Component {
             this.setState({
                 members: new_members
             })
+        }
+    }
+
+    handleChoresChange(action_chores, action) {
+        if (action === "add") {
+            this.setState({
+                chores: this.state.chores.concat(action_chores)
+            })
+        } else {
+            const new_chores = this.state.chores.filter(chore => chore.id != action_chores)
+            this.setState({
+                chores: new_chores
+            }) 
         }
     }
 
@@ -85,20 +117,25 @@ export default class App extends Component {
     componentDidMount() {
         this.checkLoginStatus();
         this.getMembers();
+        this.allChores();
     }
 
     render() {
         return (
-            <div>
+            <div className="background">
                 <BrowserRouter>
                     <Switch>
                         <Route exact path={"/"} render={props => (<Login {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.loggedInStatus} />
                         )} />
                         <Route exact path={"/home"} render={props => (<Home {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.loggedInStatus} />
                         )} />
-                        <Route exact path={"/chores_changes"} render={props => (<ChoresChange {...props} />
+                        <Route exact path={"/arrangement"} render={props => (<Arrangement {...props} />
                         )} />
                         <Route exact path={"/members_changes"} render={props => (<MembersChange {...props} members={this.state.members} handleMemberChange={this.handleMemberChange} />
+                        )} />
+                        <Route exact path={"/chores_changes"} render={props => (<ChoresChange {...props} chores={this.state.chores} handleChoresChange={this.handleChoresChange} />
+                        )} />
+                        <Route exact path={"/set_up"} render={props => (<SetUp {...props} members={this.state.members} chores={this.state.chores} handleMemberChange={this.handleMemberChange} handleChoresChange={this.handleChoresChange} />
                         )} />
                     </Switch>
                 </BrowserRouter>

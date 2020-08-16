@@ -17,9 +17,9 @@ class HomeController < ApplicationController
   end
 
   def all_chores
-    @chores = User.find_by(id: session[:user_id]).chores
+    @@chores = User.find_by(id: session[:user_id]).chores
     render json: {
-      chores: @chores
+      chores: @@chores
     }
   end
 
@@ -83,5 +83,28 @@ class HomeController < ApplicationController
   def delete_member
     id = params[:member_id]
     Member.find_by(id: id).delete
+  end
+
+  def add_chores
+    title = params[:chores][:title]
+    description = params[:chores][:description]
+    new_chores = Chore.create(title: title, description: description, user_id: session[:user_id])
+    render json: {
+      new_chores: new_chores
+    }
+  end
+
+  def delete_chores
+    id = params[:chores_id]
+    Chore.find_by(id: id).delete
+  end
+
+  def reset
+    @@members.each do |member|
+      Member.find_by(id: member.id).delete;
+    end
+    @@chores.each do |chore|
+      Chore.find_by(id: chore.id).delete;
+    end
   end
 end

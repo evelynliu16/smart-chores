@@ -1,125 +1,90 @@
 import React, { Component } from "react";
-import axios from "axios";
+import axios from "axios"; 
 
 class ChoresChange extends Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
-            members: [],
-            chores: []
+            new_chore_title: "",
+            new_chore_description: ""
         }
 
-        this.submitArrangementChange = this.submitArrangementChange.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.getMembers = this.getMembers.bind(this)
-        this.allChores = this.allChores.bind(this)
-    }
-
-    submitArrangementChange(event) {
-        var data = {};
-        for (let i = 0; i < this.state.members.length; i++) {
-            var id = this.state.members[i].id
-            data[id] = this.state[id];
-        }
-        axios.post("http://localhost:3000/chores_arrangement_changes", 
-                    { data: data },
-                    { withCredentials : true }
-        )
-        .then(response => {
-           this.props.history.push("/home");
-        })
-        .catch(error => {
-            console.log("Change arrangement error", error);
-        }); 
-        event.preventDefault();
+        this.handleAdd = this.handleAdd.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     handleChange(event) {
-        let arrangements = this.state[event.target.id];
-        arrangements[event.target.value] = event.target.checked;
         this.setState({
-            [event.target.id]: arrangements
+            [event.target.name]: event.target.value
         })
     }
 
-    getMembers() {
-        axios.get("http://localhost:3000/get_members",
-            { withCredentials: true }
-        )
-        .then(response => {
-            this.setState({
-                members: response.data.members
-            })
-        })
-        .catch(error => {
-            console.log("Get members error", error);
-        });
-    }
-
-    allChores() {
-        axios.get("http://localhost:3000/all_chores",
-            { withCredentials: true }
-        )
-        .then(response => {
-            this.setState({
-                chores: response.data.chores
-            })
-        })
-        .catch(error => {
-            console.log("Get chores error", error);
-        });
-    }
-
-    componentDidUpdate(prevProps, prevStates) {
-        if (prevStates.members != this.state.members || prevStates.chores != this.state.chores) {
-            for (let j = 0; j < this.state.members.length; j++) {
-                var object = {};
-                for (let i = 0; i < this.state.chores.length; i++) {
-                    object[this.state.chores[i].id] = false;
-                }
+    handleAdd() {
+        const title = this.state.new_chore_title;
+        const description = this.state.new_chore_description;
+        if (this.state.new_chore_title === "") {
+            alert("Please provide a title for your new chores")
+        } else {
+            axios.post("http://localhost:3000/add_chores",
+                        { chores : {
+                            title: title,
+                            description: description
+                        }},
+                        { withCredentials: true })
+            .then(response => {
+                this.props.handleChoresChange(response.data.new_chores, "add");
                 this.setState({
-                    [this.state.members[j].id]: object
+                    new_chore_title: "",
+                    new_chore_description: ""
                 })
-            }
+            })
+            .catch(error => {
+                console.log("Add chores error", error);
+            })
         }
     }
 
-    componentDidMount() {
-        this.getMembers();
-        this.allChores();
+    handleDelete(event) {
+        var id = event.target.value;
+        axios.post("http://localhost:3000/delete_chores",
+                    {chores_id: id},
+                    {withCredentials: true})
+        .then(response => {
+            this.props.handleChoresChange(id, "delete");
+        })
+        .catch(error => {
+            console.log("Delete chores error", error);
+        })
     }
 
     render() {
-        var should_return = false;
-        if (Object.entries(this.state).length > 2 
-            && Object.entries(this.state[Object.keys(this.state)[0]]).length != 0
-            && this.state.members.length != 0 && this.state.chores.length != 0) {
-                should_return = true;
-        }
-        
-        return (
-            <div className="background">
-                <h3 className="page-title">Change chores arrangement</h3><br/>
-                {should_return  ? (
-                    this.state.members.map(member => (
-                        <div key={member.id}>
-                            <h3>{member.name}</h3>
-                            <form id={member.id}>
-                                {this.state.chores.map(chore => (
-                                    <React.Fragment key={chore.id}>
-                                        <input type="checkbox" className="regular-checkbox" id={member.id} value={chore.id} 
-                                        checked={this.state[member.id][chore.id]} onChange={this.handleChange} />
-                                        <label className="checkbox-label" htmlFor={chore.id}>{chore.title}</label>
-                                    </React.Fragment>
-                                ))}
-                            </form>
-                        </div>
-                    ))
-                    ) : (<div></div>)}
-                <button type="submit" onClick={this.submitArrangementChange}>Save chores arrangement changes</button>
+
+        return(
+            <div style={{ textAlign: "center" }}>
+                <h3 className="page-title">Add or delete chores</h3><br />
+                {this.props.chores.length != 0 ? (
+                    this.props.chores.map(chore => 
+                        <div key={chore.id}> 
+                        <h2 className="title">{chore.title}</h2><br/>
+                        <h3 className="descript">{chore.description}</h3>
+                        <button value={chore.id} type="button" onClick={this.handleDelete}>Delete</button>
+                        </div>))
+                    : (<h1>You do not have any chores added yet</h1>)
+                }
+                <br />
+                <input type="text" className="title-input" name="new_chore_title" value={this.state.new_chore_title} 
+                    placeholder="Please type the title of the new chores" onChange={this.handleChange} /><br />
+                <input type="text" className="descrip-input" name="new_chore_description" value={this.state.new_chore_description} 
+                    placeholder="Please type the description of the new chores" onChange={this.handleChange} /><br />
+                <button type="button" onClick={this.handleAdd}>Add</button><br />
+                {this.props.no_save ?
+                    (<React.Fragment></React.Fragment>)
+                    : (<button type="button" onClick={this.props.history.goBack}>Save Changes</button>)
+                }
             </div>
-        )
+        );
     }
 }
 
