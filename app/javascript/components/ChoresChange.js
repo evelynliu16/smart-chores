@@ -63,7 +63,7 @@ class ChoresChange extends Component {
 
         return(
             <div style={{ textAlign: "center" }}>
-                <h3 className="page-title">Add or delete chores</h3><br />
+                <h3 className="page-title">Add or delete chores</h3><br/>
                 {this.props.chores.length != 0 ? (
                     this.props.chores.map(chore => 
                         <div key={chore.id}> 
@@ -73,12 +73,12 @@ class ChoresChange extends Component {
                         </div>))
                     : (<h1>You do not have any chores added yet</h1>)
                 }
-                <br />
+                <br/>
                 <input type="text" className="title-input" name="new_chore_title" value={this.state.new_chore_title} 
-                    placeholder="Please type the title of the new chores" onChange={this.handleChange} /><br />
+                    placeholder="Please type the title of the new chores" onChange={this.handleChange} /><br/>
                 <input type="text" className="descrip-input" name="new_chore_description" value={this.state.new_chore_description} 
-                    placeholder="Please type the description of the new chores" onChange={this.handleChange} /><br />
-                <button type="button" onClick={this.handleAdd}>Add</button><br />
+                    placeholder="Please type the description of the new chores" onChange={this.handleChange} /><br/>
+                <button type="button" onClick={this.handleAdd}>Add</button><br/>
                 {this.props.no_save ?
                     (<React.Fragment></React.Fragment>)
                     : (<button type="button" onClick={this.props.history.goBack}>Save Changes</button>)

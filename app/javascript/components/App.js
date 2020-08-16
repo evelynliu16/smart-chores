@@ -116,8 +116,10 @@ export default class App extends Component {
 
     componentDidMount() {
         this.checkLoginStatus();
-        this.getMembers();
-        this.allChores();
+        if (Object.entries(this.state.user).length != 0) {
+            this.getMembers();
+            this.allChores();
+        }
     }
 
     render() {

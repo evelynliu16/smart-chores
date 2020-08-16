@@ -17,7 +17,7 @@ class SetUp extends Component {
 
         return (
             <div>
-                <MembersChange handleMemberChange={this.props.handleMemberChange} members={this.props.members} no_save={true} /><br /><br />
+                <MembersChange handleMemberChange={this.props.handleMemberChange} members={this.props.members} no_save={true} /><br/><br/>
                 <ChoresChange handleChoresChange={this.props.handleChoresChange} chores={this.props.chores} no_save={true} />
                 <button type="button" onClick={this.handleClick}>Go to chores arrangement</button>
                 <button type="button" onClick={this.props.history.goBack}>Go back</button>

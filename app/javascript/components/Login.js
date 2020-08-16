@@ -35,6 +35,8 @@ class Login extends Component {
             .then(response => {
                 if (response.data.status === "created") {
                     this.handleSuccessfulAuth(response.data);
+                } else {
+                    alert("You username or password is incorrect")
                 }
             })
             .catch(error => {
@@ -57,25 +59,26 @@ class Login extends Component {
 
     render() {
         return (
-            <div id="formContent">
+            <div style={{ padding: "20px" }}>
                 <form onSubmit={this.handleSubmit}>
                     <input type="text"
                         className="fadeIn second"
                         placeholder="Username"
+                        style={{ margin: "10px" }}
                         name="username"
                         value={this.state.username}
                         onChange={this.handleChange}
                         required
                     />
 
-                    <input className="fadeIn third"
-                        type="password"
+                    <input type="password"
                         placeholder="Password"
                         name="password"
+                        style={{ margin: "10px" }}
                         value={this.state.password}
                         onChange={this.handleChange}
                         required
-                    />
+                    /><br/>
 
                     <button type="submit" className="fadeIn fourth">Sign in</button>
                 </form>

@@ -57,8 +57,7 @@ class MembersChange extends Component {
     
 
     render() {
-
-        console.log(this.props)
+        
         return (
             <div style={{textAlign:"center"}}>
                 <h3 className="page-title">Add or delete members</h3><br/>
@@ -72,7 +71,7 @@ class MembersChange extends Component {
                 <br />
                 <input type="text" className="name-input" value={this.state.new_member} placeholder="Please type the name of the new member" 
                     onChange={this.handleChange}></input>
-                <button type="button" onClick={this.handleAddSubmit}>Add</button><br />
+                <button type="button" onClick={this.handleAddSubmit}>Add</button><br/>
                 {this.props.no_save ?
                     (<React.Fragment></React.Fragment>)
                     : (<button type="button" onClick={this.props.history.goBack}>Save Changes</button>)

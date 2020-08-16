@@ -46,20 +46,22 @@ class Register extends Component {
 
     render() {
         return (
-            <div>
+            <div style={{padding: "20px"}}>
                 <form onSubmit={this.handleSubmit}>
                     <input type="text"
                         placeholder="Username"
                         name="username"
+                        style={{ margin: "10px" }}
                         value={this.state.username}
                         onChange={this.handleChange}
                         required
-                    />
+                    /><br/>
 
                     <input
                         type="password"
                         placeholder="Password"
                         name="password"
+                        style={{margin: "10px"}}
                         value={this.state.password}
                         onChange={this.handleChange}
                         required
@@ -69,10 +71,11 @@ class Register extends Component {
                         type="password"
                         placeholder="Password confirmation"
                         name="password_confirmation"
+                        style={{margin: "10px"}}
                         value={this.state.password_confirmation}
                         onChange={this.handleChange}
                         required
-                    />
+                    /><br/>
 
                     <button type="submit">Register</button>
                 </form>
