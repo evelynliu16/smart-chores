@@ -1,0 +1,6 @@
+Hi <%= @member.name %>,
+Your chores for this week are:
+<% @member.chores.each do |chore|%>
+*<%= chore.title %>
+<%= chore.description %>
+<% end %>

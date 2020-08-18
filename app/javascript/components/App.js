@@ -32,6 +32,8 @@ export default class App extends Component {
             loggedInStatus: "LOGGED_IN",
             user: data.user
         });
+        this.getMembers();
+        this.allChores();
     }
 
     getMembers() {
@@ -51,7 +53,9 @@ export default class App extends Component {
     handleLogout() {
         this.setState({
             loggedInStatus: "NOT_LOGGED_IN",
-            user: {}
+            user: {},
+            members: [],
+            chores: []
         });
     }
 
@@ -74,8 +78,14 @@ export default class App extends Component {
             this.setState({
                 members: this.state.members.concat(action_member)
             })
-        } else {
+        } else if (action === "delete") {
             const new_members = this.state.members.filter(member => member.id != action_member)
+            this.setState({
+                members: new_members
+            })
+        } else {
+            var new_members = this.state.members.filter(member => member.id != action_member.id)
+            new_members.push(action_member);
             this.setState({
                 members: new_members
             })
@@ -87,11 +97,17 @@ export default class App extends Component {
             this.setState({
                 chores: this.state.chores.concat(action_chores)
             })
-        } else {
+        } else if (action === "delete") {
             const new_chores = this.state.chores.filter(chore => chore.id != action_chores)
             this.setState({
                 chores: new_chores
             }) 
+        } else {
+            var new_chores = this.state.chores.filter(chore => chore.id != action_chores.id)
+            new_chores.push(action_chores);
+            this.setState({
+                chores: new_chores
+            })
         }
     }
 
@@ -102,6 +118,8 @@ export default class App extends Component {
                 this.setState({
                     loggedInStatus: "LOGGED_IN",
                     user: response.data.user});
+                this.getMembers();
+                this.allChores();
             } else if (!response.data.logged_in & this.state.loggedInStatus === "LOGGED_IN") {
                 this.setState({
                     loggedInStatus: "NOT_LOGGED_IN",
@@ -116,10 +134,6 @@ export default class App extends Component {
 
     componentDidMount() {
         this.checkLoginStatus();
-        if (Object.entries(this.state.user).length != 0) {
-            this.getMembers();
-            this.allChores();
-        }
     }
 
     render() {

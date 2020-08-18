@@ -80,7 +80,7 @@ class Login extends Component {
                         required
                     /><br/>
 
-                    <button type="submit" className="fadeIn fourth">Sign in</button>
+                    <button type="submit">Sign in</button>
                 </form>
                 <Register handleSuccessfulAuth={this.handleSuccessfulAuth} />
             </div>

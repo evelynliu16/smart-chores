@@ -131,7 +131,8 @@ button:hover {
   display: inline-block;
   padding: 10px;
   min-width: 200px;
-  
+  margin: 0px;
+  padding-bottom: 7px;
 }
 
 .page-title {
@@ -166,12 +167,13 @@ button:hover {
   width: 400px;
   height: fit-content;
   min-height: 200px;
-  border: 3px solid #555
+  border: 3px solid #555,
 }
 
 .name-input {
   width: 400px;
   min-height: 40px;
   height: fit-content;
-  border: 3px solid #555
+  border: 3px solid #555;
+  margin: 10px
 }

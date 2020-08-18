@@ -100,7 +100,7 @@ class Arrangement extends Component {
         
         return (
             <div>
-                <h3 className="page-title">Change chores arrangement</h3><br/>
+                <h3 className="page-title">Change tasks arrangement</h3><br/>
                 {should_return  ? (
                     this.state.members.map(member => (
                         <div key={member.id}>
@@ -117,7 +117,8 @@ class Arrangement extends Component {
                         </div>
                     ))
                     ) : (<div></div>)}
-                <button type="submit" onClick={this.submitArrangementChange}>Save chores arrangement changes</button>
+                <button type="submit" onClick={this.submitArrangementChange}>Save tasks arrangement changes</button>
+                <button type="button" onClick={this.props.history.goBack}>Cancel</button>
             </div>
         )
     }

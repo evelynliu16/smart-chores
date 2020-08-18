@@ -74,7 +74,8 @@ class HomeController < ApplicationController
 
   def add_new_member
     name = params[:member]
-    new_member = Member.create(name: name, user_id: session[:user_id])
+    email = params[:email]
+    new_member = Member.create(name: name, email: email, user_id: session[:user_id])
     render json: {
       new_member: new_member
     }
@@ -105,6 +106,45 @@ class HomeController < ApplicationController
     end
     @@chores.each do |chore|
       Chore.find_by(id: chore.id).delete;
+    end
+  end
+
+  def edit_members
+    member_change = params[:member]
+    member = Member.find_by(id: member_change[:member_id])
+    member.name = member_change[:new_name]
+    member.email = member_change[:new_email]
+    member.save
+    render json: {
+      member: member
+    }
+  end
+
+  def edit_chores
+    chore_change = params[:chore]
+    chore = Chore.find_by(id: chore_change[:chore_id])
+    chore.title = chore_change[:new_title]
+    chore.description = chore_change[:new_descript]
+    chore.save
+    render json: {
+      chore: chore
+    }
+  end
+
+  def send_emails
+    response = ""
+    @user = User.find_by(id: session[:user_id])
+    @members = User.find_by(id: session[:user_id]).members
+    respond_to do |format|
+      @members.each do |member| 
+        if (member.email)
+          UserMailer.chores_email(member).deliver_now
+          response.concat(member.name + " ");
+
+          format.html { redirect_to('/home', notice: 'Emails were successfully sent') }
+          format.json { render json: member, members: response, location: '/home' }
+        end
+      end
     end
   end
 end

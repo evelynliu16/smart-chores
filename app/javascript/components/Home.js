@@ -14,11 +14,12 @@ class Home extends Component {
         this.memberChange = this.memberChange.bind(this);
         this.choresChange = this.choresChange.bind(this);
         this.reset = this.reset.bind(this);
-        this.getMemberAndChores = this.getMembersAndChores.bind(this);
+        this.getMemberAndchores = this.getMembersAndchores.bind(this);
         this.switch = this.switch.bind(this);
         this.handleSetUp = this.handleSetUp.bind(this);
+        this.sendEmails = this.sendEmails.bind(this);
     }
-
+        
     /** Log out the user. */
     handleLogout() {
         axios.delete("http://localhost:3000/logout", { withCredentials: true })
@@ -45,6 +46,17 @@ class Home extends Component {
         this.props.history.push("/members_changes");
     }
 
+    sendEmails() {
+        axios.get("http://localhost:3000/send_emails",
+            { withCredentials : true })
+        .then(response => {
+            alert("Emails have been sent successfully");
+        })
+        .catch(error => {
+            console.log("Sending email error", error);
+        })
+    }
+
     /** Switch the chores either clockwise or counterclockwise. */
     switch(event) {
         var resp = event.target.value;
@@ -54,8 +66,7 @@ class Home extends Component {
         )
         .then(response => {
             if (response.data.switched) {
-                console.log(resp);
-                this.getMemberAndChores();
+                this.getMemberAndchores();
             }
         })
         .catch(error => {
@@ -79,11 +90,15 @@ class Home extends Component {
     }
     
     componentDidMount() {
-        this.getMemberAndChores();
+        if (!this.props.loggedInStatus || this.props.loggedInStatus !== "LOGGED_IN"){
+            this.props.history.push('/');
+        } else {
+            this.getMemberAndchores();
+        }
     }
 
     /** Set state for all the members and each member's chores */
-    getMembersAndChores() {
+    getMembersAndchores() {
         axios.get("http://localhost:3000/get_members",
             { withCredentials: true }
         )
@@ -126,17 +141,19 @@ class Home extends Component {
                 </div>
                 {this.state.members.length != 0 ? 
                 (<React.Fragment>
-                    <button type="button" onClick={this.choresArrangementChanges}>Change the chores arrangement</button><br/>
-                    <button type="button" onClick={this.memberChange}>Change the members</button><br/>
-                    <button type="button" onClick={this.choresChange}>Change the chores</button><br/>
+                    <button type="button" onClick={this.choresArrangementChanges}>Change the tasks arrangement</button><br/>
+                    <button type="button" onClick={this.memberChange}>Edit members</button><br/>
+                    <button type="button" onClick={this.choresChange}>Edit tasks</button><br/>
                     <button type="button" onClick={this.reset}>Reset</button><br />
-                    <button type="button" value="Chores switched clockwise" id="1" onClick={this.switch}>Switch clockwise</button>
-                    <button type="button" value="Chores switched counterclockwise" id="0" onClick={this.switch}>Switch counterclockwise</button><br/>
+                    <button type="button" value="chores switched clockwise" id="1" onClick={this.switch}>Switch clockwise</button>
+                    <button type="button" value="chores switched counterclockwise" id="0" onClick={this.switch}>Switch counterclockwise</button><br/>
+                    <button type="button" onClick={this.sendEmails}>Send tasks emails</button><br/>
                     <button type="button" onClick={this.handleLogout}>Log out</button>
                 </React.Fragment>) 
                 : (<React.Fragment>
                     <h1>You do not have any members added yet</h1>
-                    <button type="button" onClick={this.handleSetUp}>Add members and chores</button>
+                    <button type="button" onClick={this.handleSetUp}>Add members and tasks</button>
+                    <button type="button" onClick={this.handleLogout}>Log out</button>
                    </React.Fragment>)
                 }
             </React.Fragment>
@@ -161,7 +178,7 @@ class Card extends Component {
                     <h3 className="descript">{chore.description}</h3>
                     </div>)
                 )) :
-                (<h5>No chores</h5>)
+                (<h5>No tasks</h5>)
                 }
             </div >
         );

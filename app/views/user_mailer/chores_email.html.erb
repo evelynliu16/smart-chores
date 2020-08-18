@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h4>Hi <%= @member.name %>,</h4>
+    <p>
+      Your chores for this week are:
+      <ul id="chores">
+      <% @member.chores.each do |chore|%>
+        <li><%= chore.title %><br>
+        <%= chore.description %><br>
+      <%end%>
+    </p>
+  </body>
+</html>
