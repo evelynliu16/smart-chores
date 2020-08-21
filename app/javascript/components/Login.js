@@ -60,6 +60,7 @@ class Login extends Component {
     render() {
         return (
             <div style={{ padding: "20px" }}>
+                <h2 className="app-name">TASKS MANAGER</h2>
                 <form onSubmit={this.handleSubmit}>
                     <input type="text"
                         className="fadeIn second"

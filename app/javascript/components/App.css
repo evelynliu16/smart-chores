@@ -177,3 +177,13 @@ button:hover {
   border: 3px solid #555;
   margin: 10px
 }
+
+.app-name {
+  font-family: "Bradley Hand", "cursive";
+  font-size: 50px;
+  padding: 15px;
+  margin: 5px 45px 30px 45px;
+  font-weight:"700";
+  border: 3px solid lightcoral;
+  border-radius: 40px;
+}
