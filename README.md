@@ -31,6 +31,7 @@ Display the tasks for each member.
 ## Buttons on the home page
 <br>
 <img src="screenshots/buttons.png" width="50%">
+
 ### _Make changes to tasks or memebrs_
 Users can change the tasks arrangement, edit memebrs and tasks, and reset/clear all the memebers and tasks data by clicking on the corresponding buttons.<br/>
 ### _Switch_
