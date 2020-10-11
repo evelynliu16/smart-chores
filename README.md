@@ -35,10 +35,10 @@ Display the tasks for each member.
 Users can change the tasks arrangement, edit memebrs and tasks, and reset/clear all the memebers and tasks data by clicking on the corresponding buttons.<br/>
 ### _Switch_
 Switch the tasks among memebrs either clockwise or counterclockwise<br/>
-### _Send emails_
+### _Send emails_ ###
 1. Email template is stored in the app/views/user_mailer. chore.title & chore.description give the information about a specific task and member.name give the name of the member the email is sent to. Please edit the parts that are not part of the ruby codes to change the template.
-2. Add a file called local_env.yml in the config folder to send emails to all the memebrs using your own email address and password as follows.
-<img src="screenshots/email.png" width="60%"/>
+2. Add a file called local_env.yml in the config folder to send emails to all the memebrs using your own email address and password as follows.<br>
+<img src="screenshots/email.png" width="60%"/><br>
 3. Whenever the user click on the send emails button, emails will be sent to each memebr with their specific tasks.
 ### _Log out_
 Log out the user. Users can access saved information at any time by signing in. 
