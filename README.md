@@ -3,7 +3,7 @@ Task manager is a web app coded with Ruby on Rails and React that helps the user
 After registration, users can add the members in their groups and the tasks they want to assign. 
 The app supports features including rearranging tasks, editing members and tasks, switching tasks, and sending emails to members with their specific tasks.
 
-Demo link: https://youtu.be/jN4uPMQgXyM
+Demo link: https://youtu.be/_QeHT6SNFNg
 
 
 ## Login/Registration
